@@ -1,52 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AR Camera Test</title>
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
-  <style>
-    body { margin: 0; overflow: hidden; }
-    #startBtn {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 20px 30px;
-      font-size: 18px;
-      z-index: 1000;
-      background-color: #ffcc33;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-  <button id="startBtn">Start AR</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <a-scene id="arScene" embedded style="display:none;"
-           arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: true;">
-    <a-nft type="nft" url="assets/markers/1_sun" smooth="true">
-      <a-box position="0 0 0" color="yellow" scale="1 1 1"></a-box>
-    </a-nft>
-  </a-scene>
+    <title>Space AR NFTs</title>
 
-  <script>
-    const startBtn = document.getElementById("startBtn");
-    const scene = document.getElementById("arScene");
+    <!-- A-Frame + AR.js NFT build -->
+    <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ar.js@3.4.2/aframe/build/aframe-ar-nft.js"></script>
 
-    startBtn.addEventListener("click", async () => {
-      startBtn.style.display = "none";
-      scene.style.display = "block";
-      try {
-        await scene.play();
-        console.log("AR scene started");
-      } catch(err) {
-        console.error("AR scene failed:", err);
+    <style>
+      body, html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: #000;
       }
-    });
-  </script>
-</body>
+    </style>
+  </head>
+
+  <body>
+    <a-scene
+      vr-mode-ui="enabled: false"
+      renderer="logarithmicDepthBuffer: true;"
+      embedded
+      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
+
+      <!-- LIGHTING (A-Frame handles rendering; not Three.js) -->
+      <a-entity light="type: ambient; color: #fff; intensity: 0.8"></a-entity>
+      <a-entity light="type: directional; color: #fff; intensity: 0.6" position="1 1 1"></a-entity>
+
+      <!-- 1. SUN -->
+      <a-nft type="nft" url="assets/markers/1_sun" smooth="true">
+        <a-sphere id="sun" radius="1.3" color="#ff8800" emissive="#ff8800" emissiveIntensity="0.7"
+                  visible="false">
+        </a-sphere>
+        <a-text value="1. Sun" color="#ffcc33" align="center"
+                position="0 2 0" scale="3 3 3" visible="false">
+        </a-text>
+      </a-nft>
+
+      <!-- 2. MOON -->
+      <a-nft type="nft" url="assets/markers/3_moon" smooth="true">
+        <a-sphere id="moon" radius="0.6" color="#cccccc"
+                  visible="false">
+        </a-sphere>
+        <a-text value="2. Moon" color="#ffffff" align="center"
+                position="0 2 0" scale="3 3 3" visible="false">
+        </a-text>
+      </a-nft>
+
+      <!-- 3. MARS -->
+      <a-nft type="nft" url="assets/markers/2_star" smooth="true">
+        <a-sphere id="mars" radius="0.9" color="#ff5533"
+                  visible="false">
+        </a-sphere>
+        <a-text value="3. Mars" color="#ff6666" align="center"
+                position="0 2 0" scale="3 3 3" visible="false">
+        </a-text>
+      </a-nft>
+
+      <!-- 4. PHOENIX -->
+      <a-nft type="nft" url="assets/markers/4_comet" smooth="true">
+        <a-sphere id="phoenix" radius="1" color="#33ffcc"
+                  visible="false">
+        </a-sphere>
+        <a-text value="4. Phoenix" color="#33ffcc" align="center"
+                position="0 2 0" scale="3 3 3" visible="false">
+        </a-text>
+      </a-nft>
+
+      <a-entity camera></a-entity>
+    </a-scene>
+
+    <script src="main.js"></script>
+  </body>
 </html>
