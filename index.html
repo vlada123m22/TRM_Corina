@@ -1,108 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Space AR Interaction</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Space AR NFTs</title>
 
   <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-
-  <style>
-    body { margin: 0; overflow: hidden; }
-    .hud {
-      position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
-      display: grid; grid-template-columns: repeat(5, auto); gap: 8px;
-      font: 600 14px/1 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      z-index: 10; pointer-events: none;
-    }
-    .hud.hidden { display: none; }
-    .hud button { pointer-events: auto; padding: 10px 12px; border: 0; border-radius: 10px; background: rgba(255,255,255,.9); }
-  </style>
+  <!-- AR.js for A-Frame -->
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
+  
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="hud" id="hud">
-    <button id="btn-rot-l">⟲</button>
-    <button id="btn-rot-r">⟳</button>
-    <button id="btn-scale--">−</button>
-    <button id="btn-scale-+">＋</button>
-    <button id="btn-color">🎨</button>
-  </div>
+  <a-scene
+      embedded
+      vr-mode-ui="enabled: false"
+      renderer="logarithmicDepthBuffer: true; antialias: true;"
+      arjs="trackingMethod: best; sourceType: webcam; sourceWidth: 1280; sourceHeight: 720; maxWidth: 1280; maxHeight: 720;">
 
-<a-scene 
-  webxr="requiredFeatures: camera-access"
-  embedded
-  vr-mode-ui="enabled: false"
-  xr-mode-ui="enabled: false">
-  <a-box position="0 0 -1" color="red"></a-box>
-  <a-entity camera look-controls></a-entity>
+      <!-- Sun Marker -->
+      <a-nft type="nft" url="assets/markers/1_sun" smooth="true">
+        <a-entity id="sun" position="0 0 0" visible="false" class="rotating"></a-entity>
+      </a-nft>
 
-    <!-- Lights -->
-    <a-entity light="type: ambient; intensity: 0.8"></a-entity>
-    <a-entity light="type: directional; intensity: 0.6" position="0 1 1"></a-entity>
+      <!-- Mars Marker -->
+      <a-nft type="nft" url="assets/markers/2_star" smooth="true">
+        <a-entity id="mars" position="0 0 0" visible="false" class="rotating"></a-entity>
+      </a-nft>
 
-    <!-- Invisible ground plane for hit-testing -->
-    <a-plane id="hit-plane" position="0 0 0" rotation="-90 0 0" width="10" height="10" material="color: #000; opacity:0; transparent:true"></a-plane>
+      <!-- Moon Marker -->
+      <a-nft type="nft" url="assets/markers/3_moon" smooth="true">
+        <a-entity id="moon" position="0 0 0" visible="false" class="rotating"></a-entity>
+      </a-nft>
 
-    <!-- Sun -->
-    <a-entity id="sun" position="0 0 -2" scale="0.3 0.3 0.3" gltf-model="/models/sun/sun.gltf" tap-gestures spin-toggle pinch-scale twist-rotate></a-entity>
+      <!-- Phoenix Marker -->
+      <a-nft type="nft" url="assets/markers/4_comet" smooth="true">
+        <a-entity id="phoenix" position="0 0 0" visible="false" class="rotating"></a-entity>
+      </a-nft>
 
-    <!-- Mars -->
-    <a-entity id="mars" position="-1 0 -3" scale="0.25 0.25 0.25" gltf-model="/models/mars/mars.gltf" tap-gestures spin-toggle pinch-scale twist-rotate></a-entity>
-
-    <!-- Moon -->
-    <a-entity id="moon" position="1 0 -2.5" scale="0.2 0.2 0.2" gltf-model="/models/moon/moon.gltf" tap-gestures spin-toggle pinch-scale twist-rotate></a-entity>
-
-    <!-- Phoenix -->
-    <a-entity id="phoenix" position="0 0 -3.5" scale="0.35 0.35 0.35" gltf-model="/models/planet_of_phoenix/planet_of_phoenix.gltf" tap-gestures spin-toggle pinch-scale twist-rotate></a-entity>
-
-    <!-- Ray for gestures -->
-    <a-entity id="ray" cursor="rayOrigin: mouse" raycaster="objects: .raytarget"></a-entity>
-
+      <a-entity camera id="main-camera" position="0 1.6 0"></a-entity>
   </a-scene>
 
-  <script type="module">
-    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-    const hud = document.getElementById('hud');
-
-    const objects = ['sun','mars','moon','phoenix'].map(id => document.getElementById(id));
-
-    // HUD Buttons
-    document.getElementById('btn-rot-l').addEventListener('click', () => nudgeRot(-15));
-    document.getElementById('btn-rot-r').addEventListener('click', () => nudgeRot(15));
-    function nudgeRot(delta){
-      objects.forEach(obj => {
-        const r = obj.getAttribute('rotation');
-        obj.setAttribute('rotation', {x:r.x, y:r.y + delta, z:r.z});
-      });
-    }
-
-    document.getElementById('btn-scale--').addEventListener('click', () => nudgeScale(0.9));
-    document.getElementById('btn-scale-+').addEventListener('click', () => nudgeScale(1.1));
-    function nudgeScale(mult){
-      objects.forEach(obj => {
-        const s = obj.getAttribute('scale');
-        obj.setAttribute('scale', {
-          x: clamp(s.x * mult, 0.1, 3),
-          y: clamp(s.y * mult, 0.1, 3),
-          z: clamp(s.z * mult, 0.1, 3)
-        });
-      });
-    }
-
-    document.getElementById('btn-color').addEventListener('click', () => {
-      objects.forEach(obj => obj.emit('random-color'));
-    });
-
-    // Tap gestures for objects
-    objects.forEach(obj => {
-      obj.addEventListener('tap', () => obj.emit('toggle-spin'));
-      obj.addEventListener('doubletap', () => obj.emit('random-color'));
-      obj.addEventListener('longpress', () => hud.classList.toggle('hidden'));
-    });
-  </script>
-
-  <!-- Include gesture components -->
   <script type="module" src="main.js"></script>
 </body>
 </html>
