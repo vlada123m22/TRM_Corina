@@ -22,102 +22,159 @@
   }
 </style>
 
-<body style="margin : 0px; overflow: hidden;">
+<body style="margin:0px; overflow:hidden;">
   <div class="arjs-loader">
     <div>Loading, please wait...</div>
   </div>
+
   <a-scene
     vr-mode-ui="enabled: false;"
     renderer="logarithmicDepthBuffer: true;"
     embedded
-    arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;"
+    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
   >
 
+    <!-- Marker 1: Sun -->
     <a-nft
-        id="firstMarker"
-        type="nft"
-        url="https://raw.githubusercontent.com/MariusPopa1/AR-System/master/markers/chain"   
-        smooth="true"
-        smoothCount="10"
-        smoothTolerance=".01"
-        smoothThreshold="5"
-    >
-
-        <a-entity
-            position="0 -200 -100"
-            scale="50 50 50"
-            gltf-model="cat.glb"
-            rotation="0 0 0"
-        ></a-entity>
-
-         <a-entity
-            position="0 -200 -50"
-            scale="30 30 30"
-            gltf-model="cat.glb"
-            rotation="0 0 0"
-        ></a-entity>
-
-         <a-entity
-            position="0 -200 50"
-            scale="70 70 70"
-            gltf-model="cat.glb"
-            rotation="0 0 0"
-        ></a-entity>
-    </a-nft>
-    
-    <a-nft
-        id="secondMarker"
-        type="nft"
-        url="https://raw.githubusercontent.com/MariusPopa1/AR-System/master/markers/jjk"
-        smooth="true"
-        smoothCount="10"
-        smoothTolerance=".01"
-        smoothThreshold="5"
+      id="sunMarker"
+      type="nft"
+      url="assets/markers/1_sun"
+      smooth="true"
+      smoothCount="10"
+      smoothTolerance=".01"
+      smoothThreshold="5"
     >
       <a-entity
-        id="trexModel"
+        id="sunModel"
         position="0 0 0"
-        scale="50 50 50"
-        gltf-model="trex.glb"
-        rotation="270 0 0"
+        scale="0.5 0.5 0.5"
+        gltf-model="models/sun/sun.gltf"
+        rotation="0 0 0"
         visible="false"
       ></a-entity>
     </a-nft>
-    
+
+    <!-- Marker 2: Mars -->
+    <a-nft
+      id="marsMarker"
+      type="nft"
+      url="assets/markers/2_star"
+      smooth="true"
+      smoothCount="10"
+      smoothTolerance=".01"
+      smoothThreshold="5"
+    >
+      <a-entity
+        id="marsModel"
+        position="0 0 0"
+        scale="0.35 0.35 0.35"
+        gltf-model="models/mars/mars.gltf"
+        rotation="0 0 0"
+        visible="false"
+      ></a-entity>
+    </a-nft>
+
+    <!-- Marker 3: Moon -->
+    <a-nft
+      id="moonMarker"
+      type="nft"
+      url="assets/markers/3_moon"
+      smooth="true"
+      smoothCount="10"
+      smoothTolerance=".01"
+      smoothThreshold="5"
+    >
+      <a-entity
+        id="moonModel"
+        position="0 0 0"
+        scale="0.25 0.25 0.25"
+        gltf-model="models/moon/moon.gltf"
+        rotation="0 0 0"
+        visible="false"
+      ></a-entity>
+    </a-nft>
+
+    <!-- Marker 4: Phoenix -->
+    <a-nft
+      id="phoenixMarker"
+      type="nft"
+      url="assets/markers/4_comet"
+      smooth="true"
+      smoothCount="10"
+      smoothTolerance=".01"
+      smoothThreshold="5"
+    >
+      <a-entity
+        id="phoenixModel"
+        position="0 0 0"
+        scale="0.6 0.6 0.6"
+        gltf-model="models/planet_of_phoenix/planet_of_phoenix.gltf"
+        rotation="0 0 0"
+        visible="false"
+      ></a-entity>
+    </a-nft>
+
     <a-entity camera></a-entity>
   </a-scene>
 
   <script>
-    let firstMarkerScanned = false;
-
+    // Track which markers have been seen
+    let markersFound = {
+      sun: false,
+      mars: false,
+      moon: false,
+      phoenix: false
+    };
 
     document.querySelector('a-scene').addEventListener('loaded', function() {
-      const firstMarker = document.querySelector('#firstMarker');
-      const secondMarker = document.querySelector('#secondMarker');
-      const trexModel = document.querySelector('#trexModel');
 
+      const sunMarker = document.querySelector('#sunMarker');
+      const marsMarker = document.querySelector('#marsMarker');
+      const moonMarker = document.querySelector('#moonMarker');
+      const phoenixMarker = document.querySelector('#phoenixMarker');
 
-      firstMarker.addEventListener('markerFound', function() {
-        console.log('First marker (cats) found!');
-        firstMarkerScanned = true;
+      const sunModel = document.querySelector('#sunModel');
+      const marsModel = document.querySelector('#marsModel');
+      const moonModel = document.querySelector('#moonModel');
+      const phoenixModel = document.querySelector('#phoenixModel');
+
+      // Marker events
+      sunMarker.addEventListener('markerFound', () => {
+        markersFound.sun = true;
+        sunModel.setAttribute('visible', 'true');
+      });
+      sunMarker.addEventListener('markerLost', () => {
+        markersFound.sun = false;
+        sunModel.setAttribute('visible', 'false');
       });
 
-      // Listen for when the second marker is found
-      secondMarker.addEventListener('markerFound', function() {
-        console.log('Second marker found!');
-     
-        if (firstMarkerScanned) {
-          trexModel.setAttribute('visible', 'true');
-          console.log('T-Rex is now visible!');
-        } else {
-          console.log('First marker must be scanned first!');
-        }
+      marsMarker.addEventListener('markerFound', () => {
+        markersFound.mars = true;
+        marsModel.setAttribute('visible', 'true');
+      });
+      marsMarker.addEventListener('markerLost', () => {
+        markersFound.mars = false;
+        marsModel.setAttribute('visible', 'false');
       });
 
-      // Hide T-Rex when second marker is lost
-      secondMarker.addEventListener('markerLost', function() {
-        trexModel.setAttribute('visible', 'false');
+      moonMarker.addEventListener('markerFound', () => {
+        markersFound.moon = true;
+        moonModel.setAttribute('visible', 'true');
       });
+      moonMarker.addEventListener('markerLost', () => {
+        markersFound.moon = false;
+        moonModel.setAttribute('visible', 'false');
+      });
+
+      phoenixMarker.addEventListener('markerFound', () => {
+        markersFound.phoenix = true;
+        phoenixModel.setAttribute('visible', 'true');
+      });
+      phoenixMarker.addEventListener('markerLost', () => {
+        markersFound.phoenix = false;
+        phoenixModel.setAttribute('visible', 'false');
+      });
+
     });
   </script>
 </body>
