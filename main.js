@@ -72,7 +72,7 @@ async function init() {
       // Set a slightly wider camera FOV to prevent the camera view from feeling "zoomed in".
       if (sceneEl.camera) {
         // Use a comfortable FOV; feel free to tweak between 50-75 depending on device.
-        sceneEl.camera.fov = 600;
+        sceneEl.camera.fov = 120;
         sceneEl.camera.updateProjectionMatrix();
       }
     } catch (err) {
