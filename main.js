@@ -59,6 +59,8 @@ async function initScene() {
 // Start AR: request camera access on user tap
 document.getElementById('start-btn').addEventListener('click', async () => {
     const video = document.getElementById('video');
+    const planeEl = document.querySelector('#video-bg');
+
     try {
         const stream = await navigator.mediaDevices.getUserMedia({
             video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } },
@@ -67,19 +69,32 @@ document.getElementById('start-btn').addEventListener('click', async () => {
         video.srcObject = stream;
         await video.play();
 
-        // Assign video as texture to plane
-        const planeEl = document.querySelector('#video-bg');
-        const videoTexture = new THREE.VideoTexture(video);
-        videoTexture.minFilter = THREE.LinearFilter;
-        videoTexture.magFilter = THREE.LinearFilter;
-        videoTexture.format = THREE.RGBFormat;
-        planeEl.getObject3D('mesh').material.map = videoTexture;
-        planeEl.getObject3D('mesh').material.needsUpdate = true;
+        // Wait for plane to load its mesh
+        planeEl.addEventListener('loaded', () => {
+            const mesh = planeEl.getObject3D('mesh');
+            if (!mesh) return;
+
+            const videoTexture = new THREE.VideoTexture(video);
+            videoTexture.minFilter = THREE.LinearFilter;
+            videoTexture.magFilter = THREE.LinearFilter;
+            videoTexture.format = THREE.RGBFormat;
+
+            mesh.material.map = videoTexture;
+            mesh.material.needsUpdate = true;
+
+            // Update texture each frame
+            const sceneEl = document.querySelector('a-scene');
+            sceneEl.addEventListener('renderstart', () => {
+                sceneEl.renderer.setAnimationLoop(() => {
+                    videoTexture.needsUpdate = true;
+                });
+            });
+        });
 
         // Hide start button
         document.getElementById('start-btn').style.display = 'none';
 
-        // Initialize 3D objects after camera feed
+        // Initialize 3D objects
         await initScene();
 
     } catch(err) {

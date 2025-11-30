@@ -7,7 +7,6 @@
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   <style>
     body { margin: 0; overflow: hidden; }
-
     #video { display: none; }
 
     #start-btn {
@@ -15,8 +14,8 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 9999;         /* make sure it is above canvas */
-      pointer-events: auto;   /* enable clicks/touches */
+      z-index: 9999;
+      pointer-events: auto;
       padding: 1em 2em;
       font-size: 1.2em;
       background: rgba(255,255,255,0.9);
@@ -28,7 +27,7 @@
 <body>
 
 <button id="start-btn">Start AR</button>
-<video id="video" autoplay playsinline></video>
+<video id="video" autoplay playsinline muted></video>
 
 <a-scene
     embedded
@@ -50,8 +49,7 @@
     <a-entity light="type: directional; intensity: 0.6" position="0 1 1"></a-entity>
 
     <!-- Video background plane -->
-    <a-entity id="video-bg" geometry="primitive: plane; width: 16; height: 9" 
-              position="0 4 -10" material="shader: flat; src: #video"></a-entity>
+    <a-plane id="video-bg" width="16" height="9" position="0 4 -10" rotation="0 0 0" material="shader: flat; src: #video"></a-plane>
 
 </a-scene>
 
