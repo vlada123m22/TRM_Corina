@@ -14,7 +14,6 @@
     justify-content: center;
     align-items: center;
   }
-
   .arjs-loader div {
     text-align: center;
     font-size: 1.25em;
@@ -22,7 +21,7 @@
   }
 </style>
 
-<body style="margin:0px; overflow:hidden;">
+<body style="margin:0; overflow:hidden;">
   <div class="arjs-loader">
     <div>Loading, please wait...</div>
   </div>
@@ -34,8 +33,9 @@
     arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
   >
 
-    <!-- Marker 1: Sun -->
+    <!-- 1 — Sun -->
     <a-nft
+      id="marker1"
       type="nft"
       url="https://raw.githubusercontent.com/Ernu-Catalina/TRM_Lab_2/main/assets/markers/1_sun/1_sun"
       smooth="true"
@@ -44,16 +44,17 @@
       smoothThreshold="5"
     >
       <a-entity
+        id="sunModel"
         position="0 0 0"
         scale="2 2 2"
         gltf-model="the_star_sun.glb"
-        rotation="0 0 0"
+        visible="true"
       ></a-entity>
     </a-nft>
 
-    <!-- Marker 2: Mars -->
+    <!-- 2 — Mars -->
     <a-nft
-      id="marsMarker"
+      id="marker2"
       type="nft"
       url="https://raw.githubusercontent.com/Ernu-Catalina/TRM_Lab_2/main/assets/markers/2_star/2_star"
       smooth="true"
@@ -64,16 +65,15 @@
       <a-entity
         id="marsModel"
         position="0 0 0"
-        scale="0.35 0.35 0.35"
+        scale="12 12 12"
         gltf-model="mars.glb"
-        rotation="0 0 0"
         visible="false"
       ></a-entity>
     </a-nft>
 
-    <!-- Marker 3: Moon -->
+    <!-- 3 — Moon -->
     <a-nft
-      id="moonMarker"
+      id="marker3"
       type="nft"
       url="https://raw.githubusercontent.com/Ernu-Catalina/TRM_Lab_2/main/assets/markers/3_moon/3_moon"
       smooth="true"
@@ -84,16 +84,15 @@
       <a-entity
         id="moonModel"
         position="0 0 0"
-        scale="0.25 0.25 0.25"
+        scale="17 17 17"
         gltf-model="moon.glb"
-        rotation="0 0 0"
         visible="false"
       ></a-entity>
     </a-nft>
 
-    <!-- Marker 4: Phoenix -->
+    <!-- 4 — Phoenix -->
     <a-nft
-      id="phoenixMarker"
+      id="marker4"
       type="nft"
       url="https://raw.githubusercontent.com/Ernu-Catalina/TRM_Lab_2/main/assets/markers/4_comet/4_comet"
       smooth="true"
@@ -104,9 +103,8 @@
       <a-entity
         id="phoenixModel"
         position="0 0 0"
-        scale="0.6 0.6 0.6"
+        scale="18 18 18"
         gltf-model="planet_of_phoenix.glb"
-        rotation="0 0 0"
         visible="false"
       ></a-entity>
     </a-nft>
@@ -115,63 +113,37 @@
   </a-scene>
 
   <script>
-    // Track which markers have been seen
-    let markersFound = {
-      sun: false,
-      mars: false,
-      moon: false,
-      phoenix: false
-    };
+    let scanned1 = false;
+    let scanned2 = false;
+    let scanned3 = false;
 
-    document.querySelector('a-scene').addEventListener('loaded', function() {
+    // Unlock Mars when Sun scanned
+    document.querySelector("#marker1").addEventListener("markerFound", () => {
+      scanned1 = true;
+      document.querySelector("#marsModel").setAttribute("visible", true);
+    });
 
-      const sunMarker = document.querySelector('#sunMarker');
-      const marsMarker = document.querySelector('#marsMarker');
-      const moonMarker = document.querySelector('#moonMarker');
-      const phoenixMarker = document.querySelector('#phoenixMarker');
+    // Unlock Moon when Sun & Mars scanned
+    document.querySelector("#marker2").addEventListener("markerFound", () => {
+      if (scanned1) {
+        scanned2 = true;
+        document.querySelector("#moonModel").setAttribute("visible", true);
+      }
+    });
 
-      const sunModel = document.querySelector('#sunModel');
-      const marsModel = document.querySelector('#marsModel');
-      const moonModel = document.querySelector('#moonModel');
-      const phoenixModel = document.querySelector('#phoenixModel');
+    // Unlock Phoenix when Sun & Mars & Moon scanned
+    document.querySelector("#marker3").addEventListener("markerFound", () => {
+      if (scanned1 && scanned2) {
+        scanned3 = true;
+        document.querySelector("#phoenixModel").setAttribute("visible", true);
+      }
+    });
 
-      // Marker events
-      sunMarker.addEventListener('markerFound', () => {
-        markersFound.sun = true;
-        sunModel.setAttribute('visible', 'true');
-      });
-      sunMarker.addEventListener('markerLost', () => {
-        markersFound.sun = false;
-        sunModel.setAttribute('visible', 'false');
-      });
-
-      marsMarker.addEventListener('markerFound', () => {
-        markersFound.mars = true;
-        marsModel.setAttribute('visible', 'true');
-      });
-      marsMarker.addEventListener('markerLost', () => {
-        markersFound.mars = false;
-        marsModel.setAttribute('visible', 'false');
-      });
-
-      moonMarker.addEventListener('markerFound', () => {
-        markersFound.moon = true;
-        moonModel.setAttribute('visible', 'true');
-      });
-      moonMarker.addEventListener('markerLost', () => {
-        markersFound.moon = false;
-        moonModel.setAttribute('visible', 'false');
-      });
-
-      phoenixMarker.addEventListener('markerFound', () => {
-        markersFound.phoenix = true;
-        phoenixModel.setAttribute('visible', 'true');
-      });
-      phoenixMarker.addEventListener('markerLost', () => {
-        markersFound.phoenix = false;
-        phoenixModel.setAttribute('visible', 'false');
-      });
-
+    // Phoenix only works if ALL previous scanned
+    document.querySelector("#marker4").addEventListener("markerFound", () => {
+      if (!(scanned1 && scanned2 && scanned3)) {
+        document.querySelector("#phoenixModel").setAttribute("visible", false);
+      }
     });
   </script>
 </body>
