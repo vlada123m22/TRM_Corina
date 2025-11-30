@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 const loader = new GLTFLoader();
 const rotatingObjects = [];
 
-// Create a glowing Sun
+// Create Sun
 function createSun() {
   const color = 0x73430d;
   const geo = new THREE.SphereGeometry(1.5, 64, 64);
@@ -19,56 +19,54 @@ function createSun() {
   return sun;
 }
 
-// Load a GLTF model
+// Load GLTF
 function loadModel(path, scale = 1) {
   return new Promise((resolve, reject) => {
     loader.load(path, (gltf) => {
       const model = gltf.scene;
       model.scale.set(scale, scale, scale);
       resolve(model);
-    }, undefined, (err) => reject(err));
+    }, undefined, reject);
   });
 }
 
 // Initialize scene
 async function init() {
-  // Load objects
   const sun = createSun();
   const mars = await loadModel('/models/mars/mars.gltf', 0.35);
   const moon = await loadModel('/models/moon/moon.gltf', 0.25);
   const phoenix = await loadModel('/models/planet_of_phoenix/planet_of_phoenix.gltf', 0.6);
 
-  // Attach to A-Frame entities
+  // Attach models
   document.querySelector('#sun').setObject3D('mesh', sun);
   document.querySelector('#mars').setObject3D('mesh', mars);
   document.querySelector('#moon').setObject3D('mesh', moon);
   document.querySelector('#phoenix').setObject3D('mesh', phoenix);
 
-  // Push to rotating array
   rotatingObjects.push(sun, mars, moon, phoenix);
 
-  // Setup lights
-  const sceneEl = document.querySelector('a-scene');
-  const ambient = new THREE.AmbientLight(0xffffff, 0.8);
-  const directional = new THREE.DirectionalLight(0xffffff, 0.6);
-  directional.position.set(0, 1, 1);
-  sceneEl.object3D.add(ambient);
-  sceneEl.object3D.add(directional);
+  // Video background
+  const video = document.getElementById('video');
+  const videoEl = document.querySelector('#video-bg');
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+    video.srcObject = stream;
+    video.play();
+
+    const videoTexture = new THREE.VideoTexture(video);
+    videoTexture.minFilter = THREE.LinearFilter;
+    videoTexture.magFilter = THREE.LinearFilter;
+    videoTexture.format = THREE.RGBFormat;
+    videoEl.getObject3D('mesh').material.map = videoTexture;
+    videoEl.getObject3D('mesh').material.needsUpdate = true;
+  } catch(err) {
+    console.warn('Could not access camera:', err);
+  }
 
   // Animate rotation
+  const sceneEl = document.querySelector('a-scene');
   sceneEl.addEventListener('renderstart', () => {
-    const renderer = sceneEl.renderer;
-    const camera = sceneEl.camera;
-
-    renderer.setPixelRatio(window.devicePixelRatio || 1);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.outputEncoding = THREE.sRGBEncoding;
-
-    camera.fov = 75;
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-
-    renderer.setAnimationLoop(() => {
+    sceneEl.renderer.setAnimationLoop(() => {
       rotatingObjects.forEach(obj => {
         if (!obj) return;
         obj.rotation.y += 0.002;
