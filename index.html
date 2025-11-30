@@ -16,9 +16,6 @@
 
 <body>
 
-  <!-- Start button -->
-  <button id="startBtn">Start AR</button>
-
   <!-- AR Scene -->
 <a-scene
   embedded
@@ -27,10 +24,10 @@
     arjs="trackingMethod: best;
       sourceType: webcam;
       # explicitly request the input (webcam) resolution — helps avoid browser downscaling/low-res default
-      sourceWidth: 1920;
-      sourceHeight: 1080;
-      maxWidth: 1920;
-      maxHeight: 1080;
+      sourceWidth: 2920;
+      sourceHeight: 2080;
+      maxWidth: 2920;
+      maxHeight: 2080;
       displayWidth: window.innerWidth;
       displayHeight: window.innerHeight;"
 
