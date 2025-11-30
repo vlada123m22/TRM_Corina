@@ -9,7 +9,9 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-  <a-scene embedded arjs="trackingMethod: best;" renderer="logarithmicDepthBuffer: true;">
+  <a-scene embedded
+         arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: true;"
+         renderer="logarithmicDepthBuffer: true;">
     
     <!-- 1. Sun -->
     <a-nft type="nft" url="assets/markers/1_sun" smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5">
