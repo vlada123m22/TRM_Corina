@@ -2,61 +2,59 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-
-  <!-- proper viewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Space AR NFTs</title>
 
   <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
 
-  <!-- Stable AR.js (NOT the npm one) -->
+  <!-- Stable AR.js -->
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
-
-  <title>Space AR</title>
+  
+  <link rel="stylesheet" href="style.css" />
 </head>
 
-<body style="margin:0; overflow:hidden; background:black;">
-  
-  <!-- Start button -->
-  <button id="startBtn" 
-    style="position:absolute; top:10px; left:10px; z-index:9999; font-size:18px;">
-    Start AR
-  </button>
+<body>
 
-  <!-- AR Scene (visible from start, not hidden) -->
+  <!-- Start button -->
+  <button id="startBtn">Start AR</button>
+
+  <!-- AR Scene -->
   <a-scene
     id="ar-scene"
     embedded
+    vr-mode-ui="enabled: false"
     renderer="logarithmicDepthBuffer: true;"
-    vr-mode-ui="enabled: false;"
     device-orientation-permission-ui="enabled: true;"
-    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+    arjs="trackingMethod: best; sourceType: webcam; sourceWidth:1280; sourceHeight:720; displayWidth:window.innerWidth; displayHeight:window.innerHeight;"
   >
-    <a-nft type="nft" url="assets/markers/1_sun">
-      <a-box color="yellow" position="0 0 0"></a-box>
+
+    <!-- Sun -->
+    <a-nft type="nft" url="assets/markers/1_sun" smooth="true">
+      <a-entity id="sun" position="0 0 0" visible="false"></a-entity>
+      <a-text value="1. Sun" color="#ffcc33" align="center" position="0 4 0" scale="5 5 5" visible="false"></a-text>
     </a-nft>
+
+    <!-- Moon -->
+    <a-nft type="nft" url="assets/markers/3_moon" smooth="true">
+      <a-entity id="moon" position="0 0 0" visible="false"></a-entity>
+      <a-text value="2. Moon" color="#ffffff" align="center" position="0 4 0" scale="5 5 5" visible="false"></a-text>
+    </a-nft>
+
+    <!-- Mars -->
+    <a-nft type="nft" url="assets/markers/2_star" smooth="true">
+      <a-entity id="mars" position="0 0 0" visible="false"></a-entity>
+      <a-text value="3. Mars" color="#ff6666" align="center" position="0 4 0" scale="5 5 5" visible="false"></a-text>
+    </a-nft>
+
+    <!-- Phoenix -->
+    <a-nft type="nft" url="assets/markers/4_comet" smooth="true">
+      <a-entity id="phoenix" position="0 0 0" visible="false"></a-entity>
+      <a-text value="4. Phoenix" color="#33ffcc" align="center" position="0 4 0" scale="5 5 5" visible="false"></a-text>
+    </a-nft>
+
   </a-scene>
 
-  <script>
-    const btn = document.getElementById("startBtn");
-    const scene = document.getElementById("ar-scene");
-
-    btn.addEventListener("click", () => {
-      // Request camera permission explicitly
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then(() => {
-          btn.style.display = "none";
-
-          // Ensure AR.js system initializes AFTER A-Frame loads
-          scene.addEventListener("loaded", () => {
-            scene.systems["arjs"]._onReady();
-          });
-        })
-        .catch(err => {
-          alert("Camera permission denied: " + err);
-        });
-    });
-  </script>
-
+  <script src="main.js"></script>
 </body>
 </html>
