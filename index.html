@@ -8,42 +8,60 @@
   <!-- A-Frame + AR.js NFT -->
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/ar.js@4.2.1/aframe/build/aframe-ar-nft.js"></script>
-  
-  <!-- Optional: custom JS -->
-  <script src="main.js"></script>
-</head>
-<body style="margin: 0; overflow: hidden;">
 
-  <a-scene embedded
+  <style>
+    body { margin: 0; overflow: hidden; }
+    #startBtn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px 30px;
+      font-size: 18px;
+      z-index: 1000;
+      background-color: #ffcc33;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="startBtn">Start AR</button>
+
+  <a-scene id="arScene" embedded
            vr-mode-ui="enabled: false"
            renderer="logarithmicDepthBuffer: true;"
-           arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: true;">
+           arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: true;"
+           style="display: none;">
     
     <!-- 1. Sun -->
     <a-nft type="nft" url="assets/markers/1_sun" smooth="true">
-      <a-box position="0 0 0" color="#ffcc33" scale="1 1 1"></a-box>
-      <a-text value="1. Sun" color="#ffcc33" align="center" position="0 2 0"></a-text>
+      <a-box id="sunBox" position="0 0 0" color="#ffcc33" scale="1 1 1" visible="true"></a-box>
+      <a-text value="1. Sun" color="#ffcc33" align="center" position="0 2 0" visible="true"></a-text>
     </a-nft>
 
     <!-- 2. Moon -->
     <a-nft type="nft" url="assets/markers/3_moon" smooth="true">
-      <a-box position="0 0 0" color="#ffffff" scale="1 1 1"></a-box>
-      <a-text value="2. Moon" color="#ffffff" align="center" position="0 2 0"></a-text>
+      <a-box id="moonBox" position="0 0 0" color="#ffffff" scale="1 1 1" visible="true"></a-box>
+      <a-text value="2. Moon" color="#ffffff" align="center" position="0 2 0" visible="true"></a-text>
     </a-nft>
 
     <!-- 3. Mars -->
     <a-nft type="nft" url="assets/markers/2_star" smooth="true">
-      <a-box position="0 0 0" color="#ff6666" scale="1 1 1"></a-box>
-      <a-text value="3. Mars" color="#ff6666" align="center" position="0 2 0"></a-text>
+      <a-box id="marsBox" position="0 0 0" color="#ff6666" scale="1 1 1" visible="true"></a-box>
+      <a-text value="3. Mars" color="#ff6666" align="center" position="0 2 0" visible="true"></a-text>
     </a-nft>
 
     <!-- 4. Phoenix -->
     <a-nft type="nft" url="assets/markers/4_comet" smooth="true">
-      <a-box position="0 0 0" color="#33ffcc" scale="1 1 1"></a-box>
-      <a-text value="4. Phoenix" color="#33ffcc" align="center" position="0 2 0"></a-text>
+      <a-box id="phoenixBox" position="0 0 0" color="#33ffcc" scale="1 1 1" visible="true"></a-box>
+      <a-text value="4. Phoenix" color="#33ffcc" align="center" position="0 2 0" visible="true"></a-text>
     </a-nft>
 
   </a-scene>
 
+  <script src="main.js"></script>
 </body>
 </html>
