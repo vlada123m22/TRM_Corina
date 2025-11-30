@@ -57,6 +57,28 @@ async function init() {
   // Animate rotation
   const sceneEl = document.querySelector('a-scene');
   sceneEl.addEventListener('renderstart', () => {
+    // Improve renderer quality by using device pixel ratio and explicit renderer sizing.
+    // This reduces the blocky/low-quality camera feed on high-DPI screens.
+    try {
+      if (sceneEl.renderer) {
+        sceneEl.renderer.setPixelRatio(window.devicePixelRatio || 1);
+        sceneEl.renderer.setSize(window.innerWidth, window.innerHeight);
+        // Improve color encoding / tonemapping for nicer visuals
+        sceneEl.renderer.outputEncoding = THREE.sRGBEncoding;
+        sceneEl.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        sceneEl.renderer.toneMappingExposure = 1.0;
+      }
+
+      // Set a slightly wider camera FOV to prevent the camera view from feeling "zoomed in".
+      if (sceneEl.camera) {
+        // Use a comfortable FOV; feel free to tweak between 50-75 depending on device.
+        sceneEl.camera.fov = 60;
+        sceneEl.camera.updateProjectionMatrix();
+      }
+    } catch (err) {
+      // Defensive: some A-Frame internal states may not be fully available on some devices.
+      console.warn('Failed to adjust renderer/camera settings:', err);
+    }
     sceneEl.renderer.setAnimationLoop(() => {
       rotatingObjects.forEach((obj, i) => {
         if (!obj) return;

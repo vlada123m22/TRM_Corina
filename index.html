@@ -23,13 +23,16 @@
 <a-scene
   embedded
   vr-mode-ui="enabled: false"
-  renderer="logarithmicDepthBuffer: true;"
-  arjs="trackingMethod: best;
-        sourceType: webcam; 
-        maxWidth: 1920; 
-        maxHeight: 1080; 
-        displayWidth: window.innerWidth; 
-        displayHeight: window.innerHeight;"
+  renderer="logarithmicDepthBuffer: true; antialias: true;"
+    arjs="trackingMethod: best;
+      sourceType: webcam;
+      # explicitly request the input (webcam) resolution — helps avoid browser downscaling/low-res default
+      sourceWidth: 1920;
+      sourceHeight: 1080;
+      maxWidth: 1920;
+      maxHeight: 1080;
+      displayWidth: window.innerWidth;
+      displayHeight: window.innerHeight;"
 
   device-orientation-permission-ui="enabled: true;"
 >
