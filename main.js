@@ -56,7 +56,7 @@ async function initScene() {
     });
 }
 
-// Start AR: request camera access on user gesture
+// Start AR: request camera access on user tap
 document.getElementById('start-btn').addEventListener('click', async () => {
     const video = document.getElementById('video');
     try {
@@ -79,7 +79,7 @@ document.getElementById('start-btn').addEventListener('click', async () => {
         // Hide start button
         document.getElementById('start-btn').style.display = 'none';
 
-        // Initialize objects after camera feed is ready
+        // Initialize 3D objects after camera feed
         await initScene();
 
     } catch(err) {

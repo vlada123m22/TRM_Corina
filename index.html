@@ -7,12 +7,16 @@
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   <style>
     body { margin: 0; overflow: hidden; }
+
     #video { display: none; }
+
     #start-btn {
       position: fixed;
-      top: 50%; left: 50%;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 10;
+      z-index: 9999;         /* make sure it is above canvas */
+      pointer-events: auto;   /* enable clicks/touches */
       padding: 1em 2em;
       font-size: 1.2em;
       background: rgba(255,255,255,0.9);
