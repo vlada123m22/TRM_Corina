@@ -5,29 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Space AR - No AR.js</title>
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    #video { display: none; }
+  </style>
 </head>
 <body>
 
-<a-scene embedded vr-mode-ui="enabled: false" renderer="antialias: true; logarithmicDepthBuffer: true;">
-  
-  <!-- Normal camera -->
-  <a-entity camera position="0 1.6 0"></a-entity>
+<video id="video" autoplay playsinline></video>
 
-  <!-- Objects at fixed positions -->
-  <a-entity id="sun" position="0 1 -3"></a-entity>
-  <a-entity id="mars" position="2 0.5 -4"></a-entity>
-  <a-entity id="moon" position="-2 0.5 -3.5"></a-entity>
-  <a-entity id="phoenix" position="0 1 -5"></a-entity>
+<a-scene
+    embedded
+    vr-mode-ui="enabled: false"
+    xr-mode-ui="enabled: false"
+    renderer="antialias: true; logarithmicDepthBuffer: true">
 
-  <!-- Lighting -->
-  <a-entity light="type: ambient; intensity: 0.8"></a-entity>
-  <a-entity light="type: directional; intensity: 0.6" position="0 1 1"></a-entity>
+    <!-- Camera -->
+    <a-entity camera position="0 1.6 0"></a-entity>
 
-  <!-- Background video feed -->
-  <a-entity id="video-bg" geometry="primitive: plane; width: 16; height: 9" material="shader: flat; src: #videoTexture" position="0 4 -10"></a-entity>
+    <!-- Objects -->
+    <a-entity id="sun" position="0 1 -3"></a-entity>
+    <a-entity id="mars" position="2 0.5 -4"></a-entity>
+    <a-entity id="moon" position="-2 0.5 -3.5"></a-entity>
+    <a-entity id="phoenix" position="0 1 -5"></a-entity>
 
-  <!-- Hidden video element -->
-  <video id="video" autoplay playsinline style="display:none;"></video>
+    <!-- Lights -->
+    <a-entity light="type: ambient; intensity: 0.8"></a-entity>
+    <a-entity light="type: directional; intensity: 0.6" position="0 1 1"></a-entity>
+
+    <!-- Video background plane -->
+    <a-entity id="video-bg" geometry="primitive: plane; width: 16; height: 9" 
+              position="0 4 -10" material="shader: flat; src: #video"></a-entity>
 
 </a-scene>
 
