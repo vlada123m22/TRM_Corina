@@ -1,36 +1,81 @@
-const btn = document.getElementById("startBtn");
-const scene = document.querySelector("a-scene");
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-btn.addEventListener("click", async () => {
-  // Wait until the A-Frame scene is loaded
-  if (!scene.hasLoaded) {
-    await new Promise((resolve) => scene.addEventListener("loaded", resolve));
-  }
+// ----- Scene reference -----
+// Use the A-Frame scene's three.js renderer
+const sceneEl = document.querySelector('a-scene');
 
-  try {
-    const videoSettings = {
-      audio: false,
-      video: {
-        facingMode: { ideal: "environment" }, // rear camera
-        width: { ideal: 1280 },
-        height: { ideal: 720 },
-        frameRate: { ideal: 30 },
-        zoom: 1.0
+// ----- GLTF Loader -----
+const loader = new GLTFLoader();
+
+// ----- Sun: glowing sphere -----
+const sunColor = 0x73430d; // dark orange-brown
+const sun = new THREE.Mesh(
+  new THREE.SphereGeometry(3, 64, 64),
+  new THREE.MeshStandardMaterial({
+    color: sunColor,
+    emissive: sunColor,
+    emissiveIntensity: 5.5,
+    metalness: 0,
+    roughness: 0.6
+  })
+);
+
+// Sun halo
+const sunLight = new THREE.PointLight(sunColor, 2.5, 100, 2);
+sunLight.position.set(0, 0, 0);
+
+// Add to rotating objects for animation
+const rotatingObjects = [sun];
+
+// ----- Helper function to load models -----
+function loadModel(path, scale = 1, position = { x: 0, y: 0, z: 0 }) {
+  return new Promise((resolve, reject) => {
+    loader.load(
+      path,
+      (gltf) => {
+        const model = gltf.scene;
+        model.scale.set(scale, scale, scale);
+        model.position.set(position.x, position.y, position.z);
+        rotatingObjects.push(model);
+
+        // Add to scene
+        sceneEl.object3D.add(model);
+
+        resolve(model);
+      },
+      undefined,
+      (err) => {
+        console.error('Error loading', path, err);
+        reject(err);
       }
-    };
+    );
+  });
+}
 
-    const stream = await navigator.mediaDevices.getUserMedia(videoSettings);
+// ----- Load planets -----
+async function loadAllModels() {
+  await loadModel('/models/mars/mars.gltf', 0.7, { x: 15, y: 0, z: 0 });
+  await loadModel('/models/moon/moon.gltf', 0.6, { x: 8, y: 0, z: 0 });
+  await loadModel('/models/planet_of_phoenix/planet_of_phoenix.gltf', 1, { x: 22, y: 0, z: 0 });
 
-    // Now the AR.js system exists
-    const arToolkitSource = scene.systems["arjs"].arToolkitSource;
-    const video = arToolkitSource.domElement;
+  // Add sun last
+  sceneEl.object3D.add(sun);
+  sceneEl.object3D.add(sunLight);
+}
 
-    video.srcObject = stream;
+// Start loading
+loadAllModels();
 
-    btn.style.display = "none";
-    console.log("Camera started successfully.");
-  } catch (err) {
-    console.error("Camera error:", err);
-    alert("Could not start camera: " + err.message);
-  }
-});
+// ----- Animation loop -----
+function animate() {
+  requestAnimationFrame(animate);
+
+  // Rotate objects on Y-axis
+  rotatingObjects.forEach(obj => {
+    obj.rotation.y += 0.002; 
+  });
+}
+
+// Start animation
+animate();
