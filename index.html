@@ -19,33 +19,11 @@
     font-size: 1.25em;
     color: white;
   }
-
-  /* Instruction text style */
-  #scanText {
-    position: absolute;
-    top: 20%; /* higher on screen */
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1.5em;
-    color: white;
-    z-index: 10000;
-    text-align: center;
-    text-shadow: 2px 2px 5px black;
-    pointer-events: none;
-    opacity: 1;
-    transition: opacity 1s ease; /* smooth fade-out */
-    width: 80%; /* wrap text nicely */
-  }
 </style>
 
 <body style="margin:0; overflow:hidden;">
   <div class="arjs-loader">
     <div>Loading, please wait...</div>
-  </div>
-
-  <!-- Instruction text overlay -->
-  <div id="scanText">
-    First the sun warms the land, then the star takes its stand, third the moon glows soft and bright, last the comet cuts the night.
   </div>
 
   <a-scene
@@ -55,79 +33,59 @@
     arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
   >
 
-    <!-- 1 — Sun -->
     <a-nft
-      id="marker1"
-      type="nft"
-      url="https://raw.githubusercontent.com/Ernu-Catalina/TRM_Lab_2/main/assets/markers/1_sun/1_sun"
-      smooth="true"
-      smoothCount="10"
-      smoothTolerance=".01"
-      smoothThreshold="5"
-    >
-      <a-entity
-        id="sunModel"
-        position="0 0 0"
-        scale="2 2 2"
-        gltf-model="the_star_sun.glb"
-        visible="true"
-      ></a-entity>
-    </a-nft>
 
-    <!-- 2 — Mars -->
-    <a-nft
-      id="marker2"
       type="nft"
-      url="https://raw.githubusercontent.com/Ernu-Catalina/TRM_Lab_2/main/assets/markers/2_star/2_star"
+      url="https://raw.githubusercontent.com/Ernu-Catalina/TRM_Lab_2/main/textures/iceland/marker""
       smooth="true"
       smoothCount="10"
       smoothTolerance=".01"
       smoothThreshold="5"
     >
       <a-entity
-        id="marsModel"
+  
         position="0 0 0"
         scale="12 12 12"
         gltf-model="mars.glb"
-        visible="false"
+   
       ></a-entity>
     </a-nft>
 
     <!-- 3 — Moon -->
     <a-nft
-      id="marker3"
+ 
       type="nft"
-      url="https://raw.githubusercontent.com/Ernu-Catalina/TRM_Lab_2/main/assets/markers/3_moon/3_moon"
+      url="https://raw.githubusercontent.com/Ernu-Catalina/TRM_Lab_2/main/textures/italy/marker"
       smooth="true"
       smoothCount="10"
       smoothTolerance=".01"
       smoothThreshold="5"
     >
       <a-entity
-        id="moonModel"
+     
         position="0 0 0"
         scale="17 17 17"
         gltf-model="moon.glb"
-        visible="false"
+     
       ></a-entity>
     </a-nft>
 
     <!-- 4 — Phoenix -->
     <a-nft
-      id="marker4"
+  
       type="nft"
-      url="https://raw.githubusercontent.com/Ernu-Catalina/TRM_Lab_2/main/assets/markers/4_comet/4_comet"
+      url="https://raw.githubusercontent.com/Ernu-Catalina/TRM_Lab_2/main/textures/japan/marker"
       smooth="true"
       smoothCount="10"
       smoothTolerance=".01"
       smoothThreshold="5"
     >
       <a-entity
-        id="phoenixModel"
+  
         position="0 0 0"
         scale="18 18 18"
         gltf-model="planet_of_phoenix.glb"
-        visible="false"
+     
       ></a-entity>
     </a-nft>
 
@@ -137,23 +95,14 @@
   <script>
     let scanned1 = false;
     let scanned2 = false;
-    let scanned3 = false;
 
-    const scanText = document.querySelector("#scanText");
-
-    // Show Mars when Sun scanned
+    // Unlock Mars when Sun scanned
     document.querySelector("#marker1").addEventListener("markerFound", () => {
       scanned1 = true;
       document.querySelector("#marsModel").setAttribute("visible", true);
-
-      // Fade out instruction text
-      scanText.style.opacity = "0";
-      setTimeout(() => {
-        scanText.style.display = "none";
-      }, 1000); // match CSS transition
     });
 
-    // Show Moon when Sun & Mars scanned
+    // Unlock Moon when Sun & Mars scanned
     document.querySelector("#marker2").addEventListener("markerFound", () => {
       if (scanned1) {
         scanned2 = true;
@@ -161,17 +110,12 @@
       }
     });
 
-    // Show Phoenix when Sun & Mars & Moon scanned
+    // Unlock Phoenix when Sun & Mars & Moon scanned
     document.querySelector("#marker3").addEventListener("markerFound", () => {
       if (scanned1 && scanned2) {
         scanned3 = true;
         document.querySelector("#phoenixModel").setAttribute("visible", true);
       }
-    });
-
-    // Phoenix remains visible even if not all scanned
-    document.querySelector("#marker4").addEventListener("markerFound", () => {
-      document.querySelector("#phoenixModel").setAttribute("visible", true);
     });
   </script>
 </body>
