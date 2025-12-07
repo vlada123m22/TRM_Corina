@@ -37,7 +37,7 @@
     <a-nft
       id="colosseumMarker"
       type="nft"
-      url="textures/italy/marker"
+      url="/textures/italy/marker"
       smooth="true"
       smoothCount="10"
       smoothTolerance=".01"
@@ -48,7 +48,7 @@
         visible="false"
         position="0 -300 -100"
         scale="30 30 30"
-        gltf-model="models/geyser.glb"
+        gltf-model="models/colosseum.glb"
         rotation="0 90 0"
       ></a-entity>
     </a-nft>
@@ -57,7 +57,7 @@
     <a-nft
       id="toriiMarker"
       type="nft"
-      url="textures/japan/marker"
+      url="/textures/japan/marker"
       smooth="true"
       smoothCount="10"
       smoothTolerance=".01"
@@ -78,7 +78,7 @@
     <a-nft
       id="geyserMarker"
       type="nft"
-      url="textures/iceland/marker"
+      url="/textures/iceland/marker"
       smooth="true"
       smoothCount="10"
       smoothTolerance=".01"
@@ -89,7 +89,7 @@
         visible="false"
         position="75 0 0"
         scale="0.6 0.6 0.6"
-        gltf-model="models/colosseum.glb"
+        gltf-model="models/geyser.glb"
         rotation="-90 0 0"
       ></a-entity>
     </a-nft>
@@ -97,7 +97,7 @@
     <a-entity camera>
   <a-entity id="orderText"
             position="0 0.5 -1.5"
-            text="value: Follow the path: Soil, Growing Plant, Grown-Up Plant.; color: white; align: center; width: 0.7; baseline: center"
+            text="value: Follow the path: Italy, Japan, Iceland.; color: white; align: center; width: 0.7; baseline: center"
             visible="false">
   </a-entity>
 </a-entity>
@@ -147,16 +147,5 @@
         console.log("Scan order wrong: Scan COLOSSEUM then TORII first.");
       }
     });
-	
-	// 3 — Scan Geyser only if Torii scanned
-    document.querySelector("#geyserMarker").addEventListener("markerFound", () => {
-      if (colosseumScanned && toriiScanned) {
-        document.querySelector("#geyserModel").setAttribute("visible", true);
-        console.log("Geyser unlocked — sequence complete!");
-      } else {
-        console.log("Scan order wrong: Scan COLOSSEUM then TORII first.");
-      }
-    });
-	
   </script>
 </body>
