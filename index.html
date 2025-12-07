@@ -168,7 +168,7 @@
       }
     });
 	// 4 — Scan Flowers only if Torii scanned
-    document.querySelector("#geyserMarker").addEventListener("markerFound", () => {
+    document.querySelector("#flowersMarker").addEventListener("markerFound", () => {
       if (colosseumScanned && toriiScanned) {
         document.querySelector("#geyserModel").setAttribute("visible", true);
         console.log("Geyser unlocked — sequence complete!");
