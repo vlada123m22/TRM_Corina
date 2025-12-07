@@ -123,7 +123,7 @@
     // 1 — Scan Colosseum
     document.querySelector("#colosseumMarker").addEventListener("markerFound", () => {
       colosseumScanned = true;
-      document.querySelector("#colosseumModel").setAttribute("visible", true);
+      document.querySelector("#geyserModel").setAttribute("visible", true);
       console.log("Colosseum scanned — next unlock is Torii.");
     });
 
@@ -141,7 +141,7 @@
     // 3 — Scan Geyser only if Torii scanned
     document.querySelector("#geyserMarker").addEventListener("markerFound", () => {
       if (colosseumScanned && toriiScanned) {
-        document.querySelector("#geyserModel").setAttribute("visible", true);
+        document.querySelector("#colosseumModel").setAttribute("visible", true);
         console.log("Geyser unlocked — sequence complete!");
       } else {
         console.log("Scan order wrong: Scan COLOSSEUM then TORII first.");
