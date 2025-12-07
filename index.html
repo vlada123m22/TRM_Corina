@@ -94,10 +94,30 @@
       ></a-entity>
     </a-nft>
 
+	    <!--  — Flower (Third) -->
+    <a-nft
+      id="flowersMarker"
+      type="nft"
+      url="/textures/flowers/marker"
+      smooth="true"
+      smoothCount="10"
+      smoothTolerance=".01"
+      smoothThreshold="5"
+    >
+      <a-entity
+        id="geyserModel"
+        visible="false"
+        position="75 0 0"
+        scale="0.6 0.6 0.6"
+        gltf-model="models/geyser.glb"
+        rotation="-90 0 0"
+      ></a-entity>
+    </a-nft>
+
     <a-entity camera>
   <a-entity id="orderText"
             position="0 0.5 -1.5"
-            text="value: Changed; color: white; align: center; width: 0.7; baseline: center"
+            text="value: Follow the path: Italy, Japan, Iceland.; color: white; align: center; width: 0.7; baseline: center"
             visible="false">
   </a-entity>
 </a-entity>
@@ -123,7 +143,7 @@
     // 1 — Scan Colosseum
     document.querySelector("#colosseumMarker").addEventListener("markerFound", () => {
       colosseumScanned = true;
-      document.querySelector("#geyserModel").setAttribute("visible", true);
+      document.querySelector("#colosseumModel").setAttribute("visible", true);
       console.log("Colosseum scanned — next unlock is Torii.");
     });
 
@@ -141,7 +161,16 @@
     // 3 — Scan Geyser only if Torii scanned
     document.querySelector("#geyserMarker").addEventListener("markerFound", () => {
       if (colosseumScanned && toriiScanned) {
-        document.querySelector("#colosseumModel").setAttribute("visible", true);
+        document.querySelector("#geyserModel").setAttribute("visible", true);
+        console.log("Geyser unlocked — sequence complete!");
+      } else {
+        console.log("Scan order wrong: Scan COLOSSEUM then TORII first.");
+      }
+    });
+	// 4 — Scan Flowers only if Torii scanned
+    document.querySelector("#geyserMarker").addEventListener("markerFound", () => {
+      if (colosseumScanned && toriiScanned) {
+        document.querySelector("#geyserModel").setAttribute("visible", true);
         console.log("Geyser unlocked — sequence complete!");
       } else {
         console.log("Scan order wrong: Scan COLOSSEUM then TORII first.");
