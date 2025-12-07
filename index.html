@@ -167,13 +167,13 @@
       }
     });
 	// 4 — Scan Flowers only if Torii scanned
-    document.querySelector("#flowersMarker").addEventListener("markerFound", () => {
-      if (colosseumScanned && toriiScanned) {
-        document.querySelector("#geyserModel").setAttribute("visible", true);
-        console.log("Geyser unlocked — sequence complete!");
-      } else {
-        console.log("Scan order wrong: Scan COLOSSEUM then TORII first.");
-      }
-    });
+	document.querySelector("#flowersMarker").addEventListener("markerFound", () => {
+	if (colosseumScanned && toriiScanned) {
+		document.querySelector("#flowersModel").setAttribute("visible", true);
+		console.log("Flowers unlocked — sequence complete!");
+	} else {
+		console.log("Scan order wrong: Scan COLOSSEUM then TORII first.");
+	}
+	});
   </script>
 </body>
