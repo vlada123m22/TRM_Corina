@@ -119,6 +119,32 @@
             text="value: FOLLOW THE path: Soil, Growing Flower,GROWN UP.; color: white; align: center; width: 0.7; baseline: center"
             visible="false">
   </a-entity>
+  
+    <a-entity id="soilFirst"
+            position="0 0.5 -1.5"
+            text="Scan the Soil First"
+            visible="false">
+  </a-entity>
+  <a-entity id="soilScanned"
+            position="0 0.5 -1.5"
+            text="Soil Scanned. Scan the small plant"
+            visible="false">
+  </a-entity>
+    <a-entity id="smallPlantScanned"
+            position="0 0.5 -1.5"
+            text="Small Plant Scanned. Scan the flower(s)"
+            visible="false">
+  </a-entity>
+  <a-entity id="smallPlantFirst"
+            position="0 0.5 -1.5"
+            text="Scan the soil and the small plant first"
+            visible="false">
+  </a-entity>
+  <a-entity id="end"
+            position="0 0.5 -1.5"
+            text="END"
+            visible="false">
+  </a-entity>
 </a-entity>
   </a-scene>
 
@@ -141,19 +167,25 @@
 
     // 1 — Scan Colosseum
     document.querySelector("#colosseumMarker").addEventListener("markerFound", () => {
+	
       colosseumScanned = true;
+	  
       document.querySelector("#colosseumModel").setAttribute("visible", true);
-      console.log("Colosseum scanned — next unlock is Torii.");
+      const colosseumScannedText = document.getElementById("soilScanned")
+	  colosseumScannedText.setAttribute("visible", true);
     });
 
     // 2 — Scan Torii only if Colosseum scanned
     document.querySelector("#toriiMarker").addEventListener("markerFound", () => {
       if (colosseumScanned) {
+		
         toriiScanned = true;
         document.querySelector("#toriiModel").setAttribute("visible", true);
-        console.log("Torii scanned — next unlock is Geyser.");
+		const smallPlantScannedText = document.getElementById("smallPlantScanned")
+		smallPlantScannedText.setAttribute("visible", true);
       } else {
-        console.log("Scan order wrong: Scan COLOSSEUM first.");
+        const soilFirstText = document.getElementById("soilFirst")
+		soilFirstText.setAttribute("visible", true);
       }
     });
 
@@ -161,9 +193,11 @@
     document.querySelector("#geyserMarker").addEventListener("markerFound", () => {
       if (colosseumScanned && toriiScanned) {
         document.querySelector("#geyserModel").setAttribute("visible", true);
-        console.log("Geyser unlocked — sequence complete!");
+        const end = document.getElementById("end")
+		end.setAttribute("visible", true);
       } else {
-        console.log("Scan order wrong: Scan COLOSSEUM then TORII first.");
+		const smallPlantFirstText = document.getElementById("smallPlantFirst")
+		smallPlantFirstText.setAttribute("visible", true);
       }
     });
 	// 4 — Scan Flowers only if Torii scanned
@@ -171,8 +205,11 @@
 	if (colosseumScanned && toriiScanned) {
 		document.querySelector("#flowersModel").setAttribute("visible", true);
 		console.log("Flowers unlocked — sequence complete!");
+		const end = document.getElementById("end")
+		end.setAttribute("visible", true);
 	} else {
-		console.log("Scan order wrong: Scan COLOSSEUM then TORII first.");
+		const smallPlantFirstText = document.getElementById("smallPlantFirst")
+		smallPlantFirstText.setAttribute("visible", true);
 	}
 	});
   </script>
