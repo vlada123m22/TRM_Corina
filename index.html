@@ -173,6 +173,10 @@
       document.querySelector("#colosseumModel").setAttribute("visible", true);
       const colosseumScannedText = document.getElementById("soilScanned")
 	  colosseumScannedText.setAttribute("visible", true);
+	  // Hide after 4 seconds
+	  setTimeout(() => {
+      colosseumScannedText.setAttribute("visible", false);
+    }, 5000);
     });
 
     // 2 — Scan Torii only if Colosseum scanned
@@ -183,9 +187,15 @@
         document.querySelector("#toriiModel").setAttribute("visible", true);
 		const smallPlantScannedText = document.getElementById("smallPlantScanned")
 		smallPlantScannedText.setAttribute("visible", true);
+	   setTimeout(() => {
+      smallPlantScannedText.setAttribute("visible", false);
+    }, 5000);
       } else {
         const soilFirstText = document.getElementById("soilFirst")
 		soilFirstText.setAttribute("visible", true);
+		setTimeout(() => {
+      soilFirstText.setAttribute("visible", false);
+    }, 5000);
       }
     });
 
@@ -195,9 +205,15 @@
         document.querySelector("#geyserModel").setAttribute("visible", true);
         const end = document.getElementById("end")
 		end.setAttribute("visible", true);
+		setTimeout(() => {
+      end.setAttribute("visible", false);
+    }, 5000);
       } else {
 		const smallPlantFirstText = document.getElementById("smallPlantFirst")
 		smallPlantFirstText.setAttribute("visible", true);
+		setTimeout(() => {
+      smallPlantFirstText.setAttribute("visible", false);
+    }, 5000);
       }
     });
 	// 4 — Scan Flowers only if Torii scanned
@@ -207,9 +223,15 @@
 		console.log("Flowers unlocked — sequence complete!");
 		const end = document.getElementById("end")
 		end.setAttribute("visible", true);
+		setTimeout(() => {
+      end.setAttribute("visible", false);
+	  }, 5000);
 	} else {
 		const smallPlantFirstText = document.getElementById("smallPlantFirst")
 		smallPlantFirstText.setAttribute("visible", true);
+		setTimeout(() => {
+      smallPlantFirstText.setAttribute("visible", false);
+    }, 5000);
 	}
 	});
   </script>
