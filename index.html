@@ -1,238 +1,137 @@
-<script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js"></script>
-<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AR.js NFT with DOM Overlay Text</title>
+<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+<script src="https://raw.githack.com/AR-js-org/AR.js/3.3.2/aframe/build/aframe-ar-nft.js"></script>
 
 <style>
+  body { margin: 0; overflow: hidden; }
   .arjs-loader {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.8);
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    height: 100%; width: 100%; position: absolute; top:0; left:0;
+    background-color: rgba(0,0,0,0.8); z-index: 9999;
+    display:flex; justify-content:center; align-items:center;
+    color:white; font-size:1.25em; text-align:center;
   }
-  .arjs-loader div {
-    text-align: center;
-    font-size: 1.25em;
+  .overlayText {
+    position: absolute;
+    top: 20px; left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.7);
     color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 1.2em;
+    display: none;
+    z-index: 999;
   }
 </style>
+</head>
+<body>
 
-<body style="margin:0; overflow:hidden;">
-  <div class="arjs-loader">
-    <div>Loading, please wait...</div>
-  </div>
+<div class="arjs-loader">Loading, please wait...</div>
 
-  <a-scene
-    vr-mode-ui="enabled: false;"
-    renderer="logarithmicDepthBuffer: true;"
-    embedded
-    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
-  >
+<!-- Overlay div for messages -->
+<div id="overlayText" class="overlayText"></div>
 
-    <!-- 1 — COLOSSEUM (First) -->
-    <a-nft
-      id="colosseumMarker"
-      type="nft"
-      url="/textures/italy/marker"
-      smooth="true"
-      smoothCount="10"
-      smoothTolerance=".01"
-      smoothThreshold="5"
-    >
-      <a-entity
-        id="colosseumModel"
-        visible="false"
-        position="0 -300 -100"
-        scale="30 30 30"
-        gltf-model="models/colosseum.glb"
-        rotation="0 90 0"
-      ></a-entity>
-    </a-nft>
+<a-scene embedded vr-mode-ui="enabled: false" renderer="logarithmicDepthBuffer: true"
+         arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
 
-    <!-- 2 — TORII (Second) -->
-    <a-nft
-      id="toriiMarker"
-      type="nft"
-      url="/textures/japan/marker"
-      smooth="true"
-      smoothCount="10"
-      smoothTolerance=".01"
-      smoothThreshold="5"
-    >
+  <!-- 1 — COLOSSEUM -->
+  <a-nft id="colosseumMarker" type="nft" url="/textures/italy/marker"
+         smooth="true" smoothCount="10" smoothTolerance=".01" smoothThreshold="5">
+    <a-entity id="colosseumModel" visible="false" position="0 -300 -100"
+              scale="30 30 30" gltf-model="models/colosseum.glb" rotation="0 90 0">
+    </a-entity>
+  </a-nft>
 
-      <a-entity
-        id="toriiModel"
-        visible="false"
-        position="20 -100 -50"
-        scale="0.4 0.4 0.4"
-        gltf-model="models/torii.glb"
-        rotation="-90 0 0"
-      ></a-entity>
-    </a-nft>
+  <!-- 2 — TORII -->
+  <a-nft id="toriiMarker" type="nft" url="/textures/japan/marker"
+         smooth="true" smoothCount="10" smoothTolerance=".01" smoothThreshold="5">
+    <a-entity id="toriiModel" visible="false" position="20 -100 -50"
+              scale="0.4 0.4 0.4" gltf-model="models/torii.glb" rotation="-90 0 0">
+    </a-entity>
+  </a-nft>
 
-    <!-- 3 — GEYSER (Third) -->
-    <a-nft
-      id="geyserMarker"
-      type="nft"
-      url="/textures/iceland/marker"
-      smooth="true"
-      smoothCount="10"
-      smoothTolerance=".01"
-      smoothThreshold="5"
-    >
-      <a-entity
-        id="geyserModel"
-        visible="false"
-        position="75 0 0"
-        scale="0.6 0.6 0.6"
-        gltf-model="models/geyser.glb"
-        rotation="-90 0 0"
-      ></a-entity>
-    </a-nft>
+  <!-- 3 — GEYSER -->
+  <a-nft id="geyserMarker" type="nft" url="/textures/iceland/marker"
+         smooth="true" smoothCount="10" smoothTolerance=".01" smoothThreshold="5">
+    <a-entity id="geyserModel" visible="false" position="75 0 0"
+              scale="0.6 0.6 0.6" gltf-model="models/geyser.glb" rotation="-90 0 0">
+    </a-entity>
+  </a-nft>
 
-	    <!--  — Flower (Third) -->
-	<a-nft
-	id="flowersMarker"
-	type="nft"
-	url="/textures/flowers/marker"
-	smooth="true"
-	smoothCount="10"
-	smoothTolerance=".01"
-	smoothThreshold="5"
-	>
-	<a-entity
-		id="flowersModel"
-		visible="false"
-		position="75 0 0"
-		scale="0.6 0.6 0.6"
-		gltf-model="models/geyser.glb"
-		rotation="-90 0 0"
-	></a-entity>
-	</a-nft>
-    <a-entity camera>
-  <a-entity id="orderText"
-            position="0 0.5 -1.5"
-            text="value: FOLLOW THE path: Soil, Growing Flower,GROWN UP.; color: white; align: center; width: 0.7; baseline: center"
-            visible="false">
-  </a-entity>
-  
-    <a-entity id="soilFirst"
-            position="0 0.5 -1.5"
-            text="Scan the Soil First"
-            visible="false">
-  </a-entity>
-  <a-entity id="soilScanned"
-            position="0 0.5 -1.5"
-            text="Soil Scanned. Scan the small plant"
-            visible="false">
-  </a-entity>
-    <a-entity id="smallPlantScanned"
-            position="0 0.5 -1.5"
-            text="Small Plant Scanned. Scan the flower(s)"
-            visible="false">
-  </a-entity>
-  <a-entity id="smallPlantFirst"
-            position="0 0.5 -1.5"
-            text="Scan the soil and the small plant first"
-            visible="false">
-  </a-entity>
-  <a-entity id="end"
-            position="0 0.5 -1.5"
-            text="END"
-            visible="false">
-  </a-entity>
-</a-entity>
-  </a-scene>
+  <!-- 4 — FLOWERS -->
+  <a-nft id="flowersMarker" type="nft" url="/textures/flowers/marker"
+         smooth="true" smoothCount="10" smoothTolerance=".01" smoothThreshold="5">
+    <a-entity id="flowersModel" visible="false" position="75 0 0"
+              scale="0.6 0.6 0.6" gltf-model="models/flowers.glb" rotation="-90 0 0">
+    </a-entity>
+  </a-nft>
 
-  <script>
-    let colosseumScanned = false;
-    let toriiScanned = false;
+  <!-- Camera -->
+  <a-entity camera arjs-camera></a-entity>
 
-  
-  document.querySelector("a-scene").addEventListener("loaded", () => {
-    const text = document.getElementById("orderText");
+</a-scene>
 
-    // Show the text immediately
-    text.setAttribute("visible", true);
+<script>
+let colosseumScanned = false;
+let toriiScanned = false;
 
-    // Hide after 4 seconds
-    setTimeout(() => {
-      text.setAttribute("visible", false);
-    }, 4000);
-  });
+const overlay = document.getElementById("overlayText");
+const loader = document.querySelector(".arjs-loader");
 
-    // 1 — Scan Colosseum
-    document.querySelector("#colosseumMarker").addEventListener("markerFound", () => {
-	
-      colosseumScanned = true;
-	  
-      document.querySelector("#colosseumModel").setAttribute("visible", true);
-      const colosseumScannedText = document.getElementById("soilScanned")
-	  colosseumScannedText.setAttribute("visible", true);
-	  // Hide after 4 seconds
-	  setTimeout(() => {
-      colosseumScannedText.setAttribute("visible", false);
-    }, 5000);
-    });
+// Utility to show overlay for a few seconds
+function showOverlay(text, duration = 4000) {
+  overlay.innerHTML = text;
+  overlay.style.display = "block";
+  setTimeout(() => {
+    overlay.style.display = "none";
+  }, duration);
+}
 
-    // 2 — Scan Torii only if Colosseum scanned
-    document.querySelector("#toriiMarker").addEventListener("markerFound", () => {
-      if (colosseumScanned) {
-		
-        toriiScanned = true;
-        document.querySelector("#toriiModel").setAttribute("visible", true);
-		const smallPlantScannedText = document.getElementById("smallPlantScanned")
-		smallPlantScannedText.setAttribute("visible", true);
-	   setTimeout(() => {
-      smallPlantScannedText.setAttribute("visible", false);
-    }, 5000);
-      } else {
-        const soilFirstText = document.getElementById("soilFirst")
-		soilFirstText.setAttribute("visible", true);
-		setTimeout(() => {
-      soilFirstText.setAttribute("visible", false);
-    }, 5000);
-      }
-    });
+// Scene loaded → hide loader and show first message
+document.querySelector("a-scene").addEventListener("loaded", () => {
+  loader.style.display = "none";
+  showOverlay("FOLLOW THE PATH: Soil → Small Plant → Flower");
+});
 
-    // 3 — Scan Geyser only if Torii scanned
-    document.querySelector("#geyserMarker").addEventListener("markerFound", () => {
-      if (colosseumScanned && toriiScanned) {
-        document.querySelector("#geyserModel").setAttribute("visible", true);
-        const end = document.getElementById("end")
-		end.setAttribute("visible", true);
-		setTimeout(() => {
-      end.setAttribute("visible", false);
-    }, 5000);
-      } else {
-		const smallPlantFirstText = document.getElementById("smallPlantFirst")
-		smallPlantFirstText.setAttribute("visible", true);
-		setTimeout(() => {
-      smallPlantFirstText.setAttribute("visible", false);
-    }, 5000);
-      }
-    });
-	// 4 — Scan Flowers only if Torii scanned
-	document.querySelector("#flowersMarker").addEventListener("markerFound", () => {
-	if (colosseumScanned && toriiScanned) {
-		document.querySelector("#flowersModel").setAttribute("visible", true);
-		console.log("Flowers unlocked — sequence complete!");
-		const end = document.getElementById("end")
-		end.setAttribute("visible", true);
-		setTimeout(() => {
-      end.setAttribute("visible", false);
-	  }, 5000);
-	} else {
-		const smallPlantFirstText = document.getElementById("smallPlantFirst")
-		smallPlantFirstText.setAttribute("visible", true);
-		setTimeout(() => {
-      smallPlantFirstText.setAttribute("visible", false);
-    }, 5000);
-	}
-	});
-  </script>
+// Marker events
+document.querySelector("#colosseumMarker").addEventListener("markerFound", () => {
+  colosseumScanned = true;
+  document.querySelector("#colosseumModel").setAttribute("visible", true);
+  showOverlay("Soil Scanned. Scan the small plant next.");
+});
+
+document.querySelector("#toriiMarker").addEventListener("markerFound", () => {
+  if (!colosseumScanned) {
+    showOverlay("Scan the soil first.");
+    return;
+  }
+  toriiScanned = true;
+  document.querySelector("#toriiModel").setAttribute("visible", true);
+  showOverlay("Small Plant Scanned. Scan the flower(s) next.");
+});
+
+document.querySelector("#geyserMarker").addEventListener("markerFound", () => {
+  if (!colosseumScanned || !toriiScanned) {
+    showOverlay("Scan the soil and small plant first.");
+    return;
+  }
+  document.querySelector("#geyserModel").setAttribute("visible", true);
+  showOverlay("Geyser unlocked! Proceed to flowers.");
+});
+
+document.querySelector("#flowersMarker").addEventListener("markerFound", () => {
+  if (!colosseumScanned || !toriiScanned) {
+    showOverlay("Scan the soil and small plant first.");
+    return;
+  }
+  document.querySelector("#flowersModel").setAttribute("visible", true);
+  showOverlay("Flowers unlocked — sequence complete!");
+});
+</script>
+
 </body>
+</html>
